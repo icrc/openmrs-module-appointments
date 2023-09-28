@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.Provider;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
@@ -33,6 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -267,10 +269,18 @@ public class AppointmentMapper {
     }
 
     private Map createPatientMap(Patient p) {
-        Map map = new HashMap();
+        Map map = new HashMap<>();
         map.put("name", p.getPersonName().getFullName());
         map.put("uuid", p.getUuid());
         map.put("identifier", p.getPatientIdentifier().getIdentifier());
+        map.put("age", p.getAge());
+        map.put("gender", p.getGender());
+//    if duplicates found on a type, we keep the preferred identifier or the first one
+        Map<String, PatientIdentifier> patientIdentifierByType = p.getActiveIdentifiers().stream().filter(patientIdentifier -> patientIdentifier.getIdentifierType() != null).
+                collect(
+                        Collectors.toMap(e -> e.getIdentifierType().toString().replaceAll("[- ]", ""), Function.identity(), (first, second) -> Boolean.TRUE.equals(second.getPreferred()) ? second : first));
+        Map<String, String> identifierByType = patientIdentifierByType.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getIdentifier()));
+        map.putAll(identifierByType);
         return map;
     }
 
