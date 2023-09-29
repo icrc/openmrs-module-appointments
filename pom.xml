@@ -4,7 +4,7 @@
 
 	<groupId>org.bahmni.module</groupId>
 	<artifactId>appointments</artifactId>
-	<version>1.6.0</version>
+	<version>1.6.1.ICRC-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Bahmni Appointment Scheduling</name>
 	<description>OpenMRS Module Scheduling and managing Appointments.</description>
@@ -96,6 +96,25 @@
 						<excludes>
 							<exclude>**/BaseIntegrationTest.java</exclude>
 						</excludes>
+						<argLine>
+							--illegal-access=permit
+							--add-opens java.base/java.lang=ALL-UNNAMED
+							--add-opens java.base/java.lang.module=ALL-UNNAMED
+							--add-opens java.base/java.lang.invoke=ALL-UNNAMED
+							--add-opens java.base/java.io=ALL-UNNAMED
+							--add-opens java.base/java.util=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.ref=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.loader=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.module=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.platform=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.util.jar=ALL-UNNAMED
+							--add-opens java.base/jdk.internal.math=ALL-UNNAMED
+							--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+							--add-opens jdk.management.jfr/jdk.management.jfr=ALL-UNNAMED
+							--add-opens java.xml/javax.xml.catalog=ALL-UNNAMED
+							--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
+						</argLine>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -301,14 +320,11 @@
 	</pluginRepositories>
 
 	<distributionManagement>
-			<snapshotRepository>
-						<id>nexus-sonatype</id>
-						<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			</snapshotRepository>
-			<repository>
-						<id>nexus-sonatype</id>
-				<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-			</repository>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/icrc/openmrs-module-appointments</url>
+		</repository>
 	</distributionManagement>
 
 	<profiles>
