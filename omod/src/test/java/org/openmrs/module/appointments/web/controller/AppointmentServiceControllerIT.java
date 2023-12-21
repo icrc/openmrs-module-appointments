@@ -55,8 +55,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         SimpleObject asResponse = SimpleObject.parseJson(handle.getContentAsString());
         assertNotNull(asResponse);
         assertEquals("Cardiology Consultation", asResponse.get("name"));
-        assertEquals("09:00:00", asResponse.get("startTime"));
-        assertEquals("17:30:00", asResponse.get("endTime"));
+        assertEquals("09:00", asResponse.get("startTime"));
+        assertEquals("17:30", asResponse.get("endTime"));
         assertEquals(30, (int) asResponse.get("durationMins"));
         assertEquals(30, (int) asResponse.get("maxAppointmentsLimit"));
         assertEquals("#00ff00", asResponse.get("color"));
@@ -95,8 +95,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         SimpleObject asResponse = SimpleObject.parseJson(handle.getContentAsString());
         assertNotNull(asResponse);
         assertEquals("Cardiology Consultation", asResponse.get("name"));
-        assertEquals("09:00:00", asResponse.get("startTime"));
-        assertEquals("17:30:00", asResponse.get("endTime"));
+        assertEquals("09:00", asResponse.get("startTime"));
+        assertEquals("17:30", asResponse.get("endTime"));
         assertEquals(30, (int)asResponse.get("durationMins"));
         assertEquals(30, (int)asResponse.get("maxAppointmentsLimit"));
         assertEquals("#0000ff", asResponse.get("color"));
@@ -105,8 +105,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         LinkedHashMap<String, Object> weeklyAvailability = (LinkedHashMap<String, Object>) (weeklyAvailabilities.get(0));
         assertNotNull(weeklyAvailability);
         assertEquals("MONDAY", weeklyAvailability.get("dayOfWeek"));
-        assertEquals("09:00:00", weeklyAvailability.get("startTime"));
-        assertEquals("17:30:00", weeklyAvailability.get("endTime"));
+        assertEquals("09:00", weeklyAvailability.get("startTime"));
+        assertEquals("17:30", weeklyAvailability.get("endTime"));
         assertEquals(10, weeklyAvailability.get("maxAppointmentsLimit"));
     }
 
@@ -159,16 +159,16 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         assertEquals("c36006d4-9fbb-4f20-866b-0ece245615a1", asResponses.get(0).getUuid());
         assertEquals("Consultation", asResponses.get(0).getName());
         assertEquals("Consultation", asResponses.get(0).getDescription());
-        assertEquals("09:00:00", asResponses.get(0).getStartTime());
-        assertEquals("17:00:00", asResponses.get(0).getEndTime());
+        assertEquals("09:00", asResponses.get(0).getStartTime());
+        assertEquals("17:00", asResponses.get(0).getEndTime());
         assertEquals(30, asResponses.get(0).getDurationMins().intValue());
         assertEquals(4, asResponses.get(0).getMaxAppointmentsLimit().intValue());
         assertEquals("Ortho", asResponses.get(0).getSpeciality().get("name"));
         assertEquals("Room1", asResponses.get(0).getLocation().get("name"));
         assertEquals("c36006d4-9fbb-4f20-866b-0ece24560000", asResponses.get(1).getUuid());
         assertEquals("Ortho Service", asResponses.get(1).getName());
-        assertEquals("09:00:00", asResponses.get(1).getStartTime());
-        assertEquals("16:00:00", asResponses.get(1).getEndTime());
+        assertEquals("09:00", asResponses.get(1).getStartTime());
+        assertEquals("16:00", asResponses.get(1).getEndTime());
         assertEquals(30, asResponses.get(1).getDurationMins().intValue());
         assertEquals(4, asResponses.get(1).getMaxAppointmentsLimit().intValue());
         assertEquals("Ortho", asResponses.get(1).getSpeciality().get("name"));
@@ -181,8 +181,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         assertNotNull(asResponse);
         assertEquals("Consultation", asResponse.getName());
         assertEquals("Consultation", asResponse.getDescription());
-        assertEquals("09:00:00", asResponse.getStartTime());
-        assertEquals("17:00:00", asResponse.getEndTime());
+        assertEquals("09:00", asResponse.getStartTime());
+        assertEquals("17:00", asResponse.getEndTime());
         assertEquals(30, asResponse.getDurationMins().intValue());
         assertEquals(4, asResponse.getMaxAppointmentsLimit().intValue());
         assertEquals("Ortho", asResponse.getSpeciality().get("name"));
@@ -286,8 +286,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         assertEquals("c36006d4-9fbb-4f20-866b-0ece245615a1", asResponses.get(0).getUuid());
         assertEquals("Consultation", asResponses.get(0).getName());
         assertEquals("Consultation", asResponses.get(0).getDescription());
-        assertEquals("09:00:00", asResponses.get(0).getStartTime());
-        assertEquals("17:00:00", asResponses.get(0).getEndTime());
+        assertEquals("09:00", asResponses.get(0).getStartTime());
+        assertEquals("17:00", asResponses.get(0).getEndTime());
         assertEquals(30, asResponses.get(0).getDurationMins().intValue());
         assertEquals(4, asResponses.get(0).getMaxAppointmentsLimit().intValue());
         assertEquals("Ortho", asResponses.get(0).getSpeciality().get("name"));
@@ -298,8 +298,8 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
         assertEquals("Initial Consultation", serviceTypes1.get("name"));
         assertEquals("c36006d4-9fbb-4f20-866b-0ece24560000", asResponses.get(1).getUuid());
         assertEquals("Ortho Service", asResponses.get(1).getName());
-        assertEquals("09:00:00", asResponses.get(1).getStartTime());
-        assertEquals("16:00:00", asResponses.get(1).getEndTime());
+        assertEquals("09:00", asResponses.get(1).getStartTime());
+        assertEquals("16:00", asResponses.get(1).getEndTime());
         assertEquals(30, asResponses.get(1).getDurationMins().intValue());
         assertEquals(4, asResponses.get(1).getMaxAppointmentsLimit().intValue());
         assertEquals("Ortho", asResponses.get(1).getSpeciality().get("name"));
