@@ -1,5 +1,6 @@
 package org.openmrs.module.appointments.conflicts.impl;
 
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.conflicts.AppointmentConflict;
 import org.openmrs.module.appointments.model.AppointmentConflictType;
 import org.openmrs.module.appointments.model.Appointment;
@@ -9,12 +10,7 @@ import org.openmrs.module.appointments.util.DateUtil;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.openmrs.module.appointments.model.AppointmentConflictType.SERVICE_UNAVAILABLE;
@@ -65,13 +61,43 @@ public class AppointmentServiceUnavailabilityConflict implements AppointmentConf
     }
 
     private boolean checkTimeAvailability(Appointment appointment, long serviceStartTime, long serviceEndTime) {
-        long appointmentStartTimeMilliSeconds = getEpochTime(appointment.getStartDateTime().getTime());
-        long appointmentEndTimeMilliSeconds = getEpochTime(appointment.getEndDateTime().getTime());
+        String clientTimezoneProperty = Context.getAuthenticatedUser().getUserProperty("clientTimezone");
+
+        Date appointmentStartDate;
+        Date appointmentEndDate;
+
+        if (clientTimezoneProperty != null) {
+            appointmentStartDate = convertDateTimezone(appointment.getStartDateTime(), clientTimezoneProperty, "UTC");
+            appointmentEndDate = convertDateTimezone(appointment.getEndDateTime(), clientTimezoneProperty, "UTC");
+        } else {
+            appointmentStartDate = appointment.getStartDateTime();
+            appointmentEndDate = appointment.getEndDateTime();
+        }
+
+        long appointmentStartTimeMilliSeconds = getEpochTime(appointmentStartDate.getTime());
+        long appointmentEndTimeMilliSeconds = getEpochTime(appointmentEndDate.getTime());
         long serviceStartTimeMilliSeconds = getEpochTime(serviceStartTime);
         long serviceEndTimeMilliSeconds = getEpochTime(serviceEndTime);
         boolean isConflict = (appointmentStartTimeMilliSeconds >= appointmentEndTimeMilliSeconds)
                 || ((appointmentStartTimeMilliSeconds < serviceStartTimeMilliSeconds)
                 || (appointmentEndTimeMilliSeconds > serviceEndTimeMilliSeconds));
         return isConflict;
+    }
+
+    private Date convertDateTimezone(Date date, String fromTimezone, String toTimezone) {
+
+        Calendar fromCalendar = Calendar.getInstance(TimeZone.getTimeZone(fromTimezone));
+        fromCalendar.setTime(date);
+
+        Calendar toCalendar = Calendar.getInstance(TimeZone.getTimeZone(toTimezone));
+        toCalendar.set(Calendar.YEAR, fromCalendar.get(Calendar.YEAR));
+        toCalendar.set(Calendar.MONTH, fromCalendar.get(Calendar.MONTH));
+        toCalendar.set(Calendar.DAY_OF_MONTH, fromCalendar.get(Calendar.DAY_OF_MONTH));
+        toCalendar.set(Calendar.HOUR_OF_DAY, fromCalendar.get(Calendar.HOUR_OF_DAY));
+        toCalendar.set(Calendar.MINUTE, fromCalendar.get(Calendar.MINUTE));
+        toCalendar.set(Calendar.SECOND, fromCalendar.get(Calendar.SECOND));
+        toCalendar.set(Calendar.MILLISECOND, fromCalendar.get(Calendar.MILLISECOND));
+
+        return toCalendar.getTime();
     }
 }
