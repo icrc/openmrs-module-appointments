@@ -97,12 +97,12 @@
 							<exclude>**/BaseIntegrationTest.java</exclude>
 						</excludes>
 						<argLine>
-							--illegal-access=permit
 							--add-opens java.base/java.lang=ALL-UNNAMED
 							--add-opens java.base/java.lang.module=ALL-UNNAMED
 							--add-opens java.base/java.lang.invoke=ALL-UNNAMED
 							--add-opens java.base/java.io=ALL-UNNAMED
 							--add-opens java.base/java.util=ALL-UNNAMED
+							--add-opens java.base/java.text=ALL-UNNAMED
 							--add-opens java.base/jdk.internal.ref=ALL-UNNAMED
 							--add-opens java.base/jdk.internal.loader=ALL-UNNAMED
 							--add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
@@ -110,10 +110,13 @@
 							--add-opens java.base/jdk.internal.platform=ALL-UNNAMED
 							--add-opens java.base/jdk.internal.util.jar=ALL-UNNAMED
 							--add-opens java.base/jdk.internal.math=ALL-UNNAMED
+							--add-opens java.base/java.lang.reflect=ALL-UNNAMED
+							--add-opens java.base/java.time=ALL-UNNAMED
 							--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
 							--add-opens jdk.management.jfr/jdk.management.jfr=ALL-UNNAMED
 							--add-opens java.xml/javax.xml.catalog=ALL-UNNAMED
 							--add-opens java.xml/jdk.xml.internal=ALL-UNNAMED
+							--add-opens java.desktop/java.awt.font=ALL-UNNAMED
 						</argLine>
 					</configuration>
 				</plugin>
@@ -170,13 +173,6 @@
 				<artifactId>openmrs-test</artifactId>
 				<version>${openmrs.platform.version}</version>
 				<type>pom</type>
-				<scope>test</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.5</version>
 				<scope>test</scope>
 			</dependency>
 
@@ -256,21 +252,8 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>${mockitoVersion}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.openmrs.api</groupId>
-				<artifactId>openmrs-api</artifactId>
-				<version>${openmrs.platform.version}</version>
-				<type>jar</type>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
+				<artifactId>javax.servlet-api</artifactId>
 				<version>3.0.1</version>
 				<scope>provided</scope>
 			</dependency>
