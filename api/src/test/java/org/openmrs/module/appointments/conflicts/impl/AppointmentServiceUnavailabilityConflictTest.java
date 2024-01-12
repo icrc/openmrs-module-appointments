@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.model.Appointment;
@@ -18,7 +17,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.*;
 
