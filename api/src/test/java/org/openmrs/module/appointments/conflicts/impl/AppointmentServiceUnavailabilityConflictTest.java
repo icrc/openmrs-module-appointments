@@ -1,13 +1,21 @@
 package org.openmrs.module.appointments.conflicts.impl;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openmrs.User;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.model.Appointment;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.ServiceWeeklyAvailability;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -17,8 +25,11 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.openmrs.module.appointments.helper.DateHelper.getDate;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(MockitoJUnitRunner.class)
+@PowerMockIgnore("javax.management.*")
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Context.class})
 public class AppointmentServiceUnavailabilityConflictTest {
 
     @InjectMocks
@@ -30,6 +41,19 @@ public class AppointmentServiceUnavailabilityConflictTest {
 //        the locale should be set to avoid issue with dayOfWeek Translation.
         Locale.setDefault(Locale.US);
     }
+
+
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        mockStatic(Context.class);
+        User authenticatedUser = new User(8);
+        Map<String,String> props=new HashMap<>();
+        props.put("clientTimezone",Locale.US.getCountry());
+        authenticatedUser.setUserProperties(props);
+        PowerMockito.when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
+    }
+
     @Test
     public void shouldReturnServiceUnavailableDayConflicts() {
         AppointmentServiceDefinition appointmentServiceDefinition = new AppointmentServiceDefinition();
