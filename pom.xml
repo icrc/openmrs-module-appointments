@@ -98,6 +98,7 @@
 						</excludes>
 						<argLine>
 							--add-opens java.base/java.lang=ALL-UNNAMED
+							--add-opens java.base/java.util.stream=ALL-UNNAMED
 							--add-opens java.base/java.lang.module=ALL-UNNAMED
 							--add-opens java.base/java.lang.invoke=ALL-UNNAMED
 							--add-opens java.base/java.io=ALL-UNNAMED
@@ -206,6 +207,12 @@
 				<artifactId>openmrs-web</artifactId>
 				<version>${openmrs.platform.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -332,6 +339,7 @@
 									<argLine>
 										-Xmx512m
 										--add-opens java.base/java.lang=ALL-UNNAMED
+										--add-opens java.base/java.util.stream=ALL-UNNAMED
 										--add-opens java.base/java.lang.module=ALL-UNNAMED
 										--add-opens java.base/java.lang.invoke=ALL-UNNAMED
 										--add-opens java.base/java.io=ALL-UNNAMED
