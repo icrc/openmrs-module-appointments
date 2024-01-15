@@ -42,7 +42,7 @@
 		<junitVersion>4.13</junitVersion>
 		<powerMockVersion>2.0.9</powerMockVersion>
 		<hamcrestVersion>2.2</hamcrestVersion>
-		<mockitoVersion>3.5.11</mockitoVersion>
+		<mockitoVersion>5.9.0</mockitoVersion>
 		<argLine>-Xmx1024m</argLine>
 		<jacocoVersion>0.7.9</jacocoVersion>
 		<openmrsAtomfeedVersion>2.6.2</openmrsAtomfeedVersion>
