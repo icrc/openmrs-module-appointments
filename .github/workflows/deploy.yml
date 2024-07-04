@@ -1,5 +1,5 @@
 # this build is designed to replicate the Travis CI workflow
-name: Deploy SNAPSHOT Version on Main branch
+name: Deploy SNAPSHOT Version on 1.6.x branch
 
 on:
   push:

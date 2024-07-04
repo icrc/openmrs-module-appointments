@@ -1,4 +1,4 @@
-name: Do Release
+name: Do Release on 1.6.x
 
 on:
   workflow_dispatch:
