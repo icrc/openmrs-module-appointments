@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.openmrs.module.appointments.dao.UserLocationDao;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
@@ -31,6 +32,9 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
 
     @Autowired
     AppointmentsService appointmentsService;
+
+    @Autowired
+    UserLocationDao userLocationDao;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
