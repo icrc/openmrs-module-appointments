@@ -42,7 +42,6 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     @Before
     public void setUp() throws Exception {
         executeDataSet("appointmentServicesTestData.xml");
-        appointmentsService.setU
     }
 
     @Test
