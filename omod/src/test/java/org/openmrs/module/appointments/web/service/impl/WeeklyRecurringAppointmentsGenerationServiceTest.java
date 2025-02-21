@@ -21,7 +21,6 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -1337,7 +1336,6 @@ public class WeeklyRecurringAppointmentsGenerationServiceTest {
     }
     
     @Test
-    @Ignore
     public void setAppointments_shouldThrowWhenFrequecyIsDecreasedSuchThatEndDateIsInPast() {
     	TimeZone.setDefault(TimeZone.getTimeZone("IST"));
         Date date = new Date();
