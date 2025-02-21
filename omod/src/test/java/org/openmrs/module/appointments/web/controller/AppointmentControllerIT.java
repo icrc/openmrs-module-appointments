@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentAuditDao;
 import org.openmrs.module.appointments.model.Appointment;
@@ -41,7 +42,7 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     @Autowired
     AppointmentAuditDao appointmentAuditDao;
 
-    @Autowired
+    @Mock
     UserLocationService userLocationService;
 
     @Rule
