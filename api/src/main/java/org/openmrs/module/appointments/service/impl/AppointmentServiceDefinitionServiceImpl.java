@@ -9,6 +9,7 @@ import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.model.ServiceWeeklyAvailability;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -16,9 +17,11 @@ import java.util.*;
 @Transactional
 public class AppointmentServiceDefinitionServiceImpl implements AppointmentServiceDefinitionService {
 
-    AppointmentServiceDao appointmentServiceDao;
+    private AppointmentServiceDao appointmentServiceDao;
 
-    AppointmentsService appointmentsService;
+    private AppointmentsService appointmentsService;
+
+    private UserLocationService userLocationService;
 
     public void setAppointmentServiceDao(AppointmentServiceDao appointmentServiceDao) {
         this.appointmentServiceDao = appointmentServiceDao;
@@ -26,6 +29,10 @@ public class AppointmentServiceDefinitionServiceImpl implements AppointmentServi
 
     public void setAppointmentsService(AppointmentsService appointmentsService) {
         this.appointmentsService = appointmentsService;
+    }
+
+    public void setUserLocationService(UserLocationService userLocationService) {
+        this.userLocationService = userLocationService;
     }
 
     @Override
@@ -39,7 +46,8 @@ public class AppointmentServiceDefinitionServiceImpl implements AppointmentServi
 
     @Override
     public List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided) {
-        List<AppointmentServiceDefinition> appointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(includeVoided, Context.getAuthenticatedUser().getId());
+
+        List<AppointmentServiceDefinition> appointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(includeVoided, userLocationService.getUserLocationIds());
         return appointmentServiceDefinitions;
     }
 

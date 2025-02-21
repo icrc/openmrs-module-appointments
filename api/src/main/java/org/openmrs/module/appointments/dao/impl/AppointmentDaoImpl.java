@@ -31,12 +31,20 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getAllAppointments(Date forDate) {
+    public List<Appointment> getAllAppointments(Date forDate, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
         criteria.add(Restrictions.eq("voided", false));
         criteria.createAlias("patient", "patient");
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         if (forDate != null) {
             Date maxDate = new Date(forDate.getTime() + TimeUnit.DAYS.toMillis(1));
             criteria.add(Restrictions.ge("startDateTime", forDate));
@@ -52,9 +60,18 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> search(Appointment appointment) {
+    public List<Appointment> search(Appointment appointment, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class).add(
                 Example.create(appointment).excludeProperty("uuid"));
+
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
 
         if(appointment.getPatient()!=null) criteria.createCriteria("patient").add(
                 Example.create(appointment.getPatient()));
@@ -72,7 +89,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getAllFutureAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition) {
+    public List<Appointment> getAllFutureAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
         criteria.add(Restrictions.eq("service", appointmentServiceDefinition));
         criteria.add(Restrictions.gt("endDateTime", new Date()));
@@ -81,11 +98,19 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
         criteria.add(Restrictions.ne("status", AppointmentStatus.Cancelled));
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         return criteria.list();
     }
 
     @Override
-    public List<Appointment> getAllFutureAppointmentsForServiceType(AppointmentServiceType appointmentServiceType) {
+    public List<Appointment> getAllFutureAppointmentsForServiceType(AppointmentServiceType appointmentServiceType, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
         criteria.add(Restrictions.eq("serviceType", appointmentServiceType));
         criteria.add(Restrictions.gt("endDateTime", new Date()));
@@ -94,11 +119,19 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
         criteria.add(Restrictions.ne("status", AppointmentStatus.Cancelled));
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         return criteria.list();
     }
 
     @Override
-    public List<Appointment> getAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition, Date startDate, Date endDate, List<AppointmentStatus> appointmentStatusFilterList) {
+    public List<Appointment> getAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition, Date startDate, Date endDate, List<AppointmentStatus> appointmentStatusFilterList, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
         criteria.createAlias("serviceType", "serviceType", JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.or(Restrictions.isNull("serviceType"), Restrictions.eq("serviceType.voided", false)));
@@ -109,6 +142,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.ge("startDateTime", startDate));
         criteria.add(Restrictions.le("startDateTime", endDate));
         criteria.createCriteria("service").add(Example.create(appointmentServiceDefinition));
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         if (appointmentStatusFilterList != null && !appointmentStatusFilterList.isEmpty()) {
             criteria.add(Restrictions.in("status", appointmentStatusFilterList));
         }
@@ -124,12 +165,20 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getAllAppointmentsInDateRange(Date startDate, Date endDate) {
+    public List<Appointment> getAllAppointmentsInDateRange(Date startDate, Date endDate, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
         criteria.add(Restrictions.eq("voided", false));
         criteria.createAlias("patient", "patient");
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         if (startDate != null) {
             criteria.add(Restrictions.ge("startDateTime", startDate));
         }
@@ -140,7 +189,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> search(AppointmentSearchRequest appointmentSearchRequest) {
+    public List<Appointment> search(AppointmentSearchRequest appointmentSearchRequest, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class);
 
         criteria.add(Restrictions.eq("voided", false));
@@ -149,6 +198,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
         setPatientCriteria(appointmentSearchRequest, criteria);
         setLimitCriteria(appointmentSearchRequest, criteria);
         setProviderCriteria(appointmentSearchRequest, criteria);
+        if (!locationIds.isEmpty()) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
 
         return criteria.list();
     }

@@ -11,6 +11,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentServiceDao;
 import org.openmrs.module.appointments.model.*;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.util.DateUtil;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -44,6 +45,9 @@ public class AppointmentServiceDefinitionServiceImplTest {
     @Mock
     private AppointmentsService appointmentsService;
 
+    @Mock
+    private UserLocationService userLocationService;
+
     @InjectMocks
     AppointmentServiceDefinitionServiceImpl appointmentServiceService;
 
@@ -55,6 +59,7 @@ public class AppointmentServiceDefinitionServiceImplTest {
         mockStatic(Context.class);
         authenticatedUser = new User(8);
         PowerMockito.when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
+        appointmentServiceService.setUserLocationService(userLocationService);
     }
 
     @Test
