@@ -12,6 +12,7 @@ import org.openmrs.module.appointments.service.AppointmentsService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
 @Transactional
 public class AppointmentServiceDefinitionServiceImpl implements AppointmentServiceDefinitionService {
 
@@ -38,7 +39,7 @@ public class AppointmentServiceDefinitionServiceImpl implements AppointmentServi
 
     @Override
     public List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided) {
-        List<AppointmentServiceDefinition> appointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(includeVoided);
+        List<AppointmentServiceDefinition> appointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(includeVoided, Context.getAuthenticatedUser().getId());
         return appointmentServiceDefinitions;
     }
 

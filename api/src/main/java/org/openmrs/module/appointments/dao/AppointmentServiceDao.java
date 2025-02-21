@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AppointmentServiceDao {
 
-    List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided);
+    List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided, Integer userId);
 
     AppointmentServiceDefinition save(AppointmentServiceDefinition appointmentServiceDefinition);
 

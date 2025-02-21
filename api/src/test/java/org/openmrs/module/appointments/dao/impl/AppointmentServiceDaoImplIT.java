@@ -30,14 +30,14 @@ public class AppointmentServiceDaoImplIT extends BaseIntegrationTest {
 
     @Test
     public void shouldGetAllNonVoidedAppointmentServices() throws Exception {
-        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false);
+        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false, null);
         assertEquals(2, allAppointmentServiceDefinitions.size());
     }
 
 
     @Test
     public void shouldGetAllAppointmentServices() throws Exception {
-        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(true);
+        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(true, null);
         assertEquals(3, allAppointmentServiceDefinitions.size());
     }
 
@@ -65,12 +65,12 @@ public class AppointmentServiceDaoImplIT extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveAppointmentService() throws Exception {
-        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false);
+        List<AppointmentServiceDefinition> allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false,null);
         assertEquals(2, allAppointmentServiceDefinitions.size());
         AppointmentServiceDefinition appointmentServiceDefinition = new AppointmentServiceDefinition();
         appointmentServiceDefinition.setName("Cardiology OPD");
         appointmentServiceDao.save(appointmentServiceDefinition);
-        allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false);
+        allAppointmentServiceDefinitions = appointmentServiceDao.getAllAppointmentServices(false,null);
         assertEquals(3, allAppointmentServiceDefinitions.size());
     }
 
