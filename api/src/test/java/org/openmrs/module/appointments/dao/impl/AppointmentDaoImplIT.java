@@ -30,32 +30,32 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
 
     @Test
     public void shouldGetAllNonVoidedAppointments() throws Exception {
-        List<Appointment> allAppointmentServices = appointmentDao.getAllAppointments(null);
+        List<Appointment> allAppointmentServices = appointmentDao.getAllAppointments(null, null);
         assertEquals(11, allAppointmentServices.size());
     }
 
     @Test
     public void shouldGetAllNonVoidedAppointmentsForDate() throws Exception {
         Date forDate = DateUtil.convertToDate("2108-08-15T00:00:00.0Z", DateUtil.DateFormatType.UTC);
-        List<Appointment> allAppointments = appointmentDao.getAllAppointments(forDate);
+        List<Appointment> allAppointments = appointmentDao.getAllAppointments(forDate, null);
         assertEquals(3, allAppointments.size());
     }
 
     @Test
     public void shouldSaveAppointmentService() throws Exception {
-        List<Appointment> allAppointments = appointmentDao.getAllAppointments(null);
+        List<Appointment> allAppointments = appointmentDao.getAllAppointments(null, null);
         assertEquals(11, allAppointments.size());
         Appointment apt = new Appointment();
         apt.setPatient(allAppointments.get(0).getPatient());
         appointmentDao.save(apt);
-        allAppointments = appointmentDao.getAllAppointments(null);
+        allAppointments = appointmentDao.getAllAppointments(null, null);
         assertEquals(12, allAppointments.size());
     }
 
     @Test
     public void shouldGetAllFutureAppointmentForTheGivenService() throws Exception {
         AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceDao.getAppointmentServiceByUuid("c36006e5-9fbb-4f20-866b-0ece245615a6");
-        List<Appointment> allAppointments = appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition);
+        List<Appointment> allAppointments = appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition, null);
         assertNotNull(allAppointments);
         assertEquals(2, allAppointments.size());
         assertEquals("75504r42-3ca8-11e3-bf2b-0800271c1111", allAppointments.get(0).getUuid());
@@ -67,7 +67,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceDao.getAppointmentServiceByUuid("c36006e5-9fbb-4f20-866b-0ece245615a6");
         Set<AppointmentServiceType> serviceTypes = appointmentServiceDefinition.getServiceTypes();
         AppointmentServiceType appointmentServiceType = serviceTypes.iterator().next();
-        List<Appointment> allFutureAppointmentsForServiceType = appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType);
+        List<Appointment> allFutureAppointmentsForServiceType = appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType, null);
         assertNotNull(allFutureAppointmentsForServiceType);
         assertEquals(3, allFutureAppointmentsForServiceType.size());
         assertEquals("75504r42-3ca8-11e3-bf2b-0800271c13346", allFutureAppointmentsForServiceType.get(0).getUuid());
@@ -79,7 +79,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         Date startDate = simpleDateFormat.parse("2017-08-08");
         Date endDate = simpleDateFormat.parse("2017-08-09");
         AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceDao.getAppointmentServiceByUuid("c36006e5-9fbb-4f20-866b-0ece245615a6");
-        List<Appointment> appointmentsForService = appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null);
+        List<Appointment> appointmentsForService = appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null, null);
         Iterator iterator = appointmentsForService.iterator();
         Appointment appointmentWithNonVoidedServiceType  = (Appointment) iterator.next();
         Appointment appointmentWithoutServiceType  = (Appointment) iterator.next();
@@ -98,7 +98,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         List<AppointmentStatus> appointmentStatusList = new ArrayList<>();
         appointmentStatusList.add(AppointmentStatus.Scheduled);
         AppointmentServiceDefinition appointmentServiceDefinition = appointmentServiceDao.getAppointmentServiceByUuid("c36006e5-9fbb-4f20-866b-0ece245615a6");
-        List<Appointment> appointmentsForService = appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, appointmentStatusList);
+        List<Appointment> appointmentsForService = appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, appointmentStatusList, null);
         assertEquals(1, appointmentsForService.size());
         Iterator iterator = appointmentsForService.iterator();
         Appointment appointment1  = (Appointment) iterator.next();
@@ -126,20 +126,20 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
     public void shouldGetAppointmentsForGivenDateRange() throws Exception {
         Date from = DateUtil.convertToDate("2108-08-10T00:00:00.0Z", DateUtil.DateFormatType.UTC);
         Date to = DateUtil.convertToDate("2108-08-15T00:00:00.0Z", DateUtil.DateFormatType.UTC);
-        List<Appointment> allAppointments = appointmentDao.getAllAppointmentsInDateRange(from, to);
+        List<Appointment> allAppointments = appointmentDao.getAllAppointmentsInDateRange(from, to, null);
         assertEquals(2, allAppointments.size());
     }
 
     @Test
     public void shouldGetAppointmentsBeforeCurrentDateWhenStartDateIsNotProvided() throws ParseException {
         Date to = DateUtil.convertToDate("2108-08-15T00:00:00.0Z", DateUtil.DateFormatType.UTC);
-        List<Appointment> allAppointments = appointmentDao.getAllAppointmentsInDateRange(null, to);
+        List<Appointment> allAppointments = appointmentDao.getAllAppointmentsInDateRange(null, to, null);
         assertEquals(6, allAppointments.size());
     }
 
     @Test
     public void shouldGetAllNonVoidedAppointmentsWhenNoDateRangeIsProvided() throws Exception {
-        List<Appointment> allAppointmentServices = appointmentDao.getAllAppointmentsInDateRange(null, null);
+        List<Appointment> allAppointmentServices = appointmentDao.getAllAppointmentsInDateRange(null, null, null);
         assertEquals(11, allAppointmentServices.size());
     }
 
@@ -149,13 +149,13 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         // this test fails after adding a default value in Appointment:
         // private Boolean isTeleconsultationEnabled = Boolean.FALSE;
         // fix that in the search function (not test)
-        List<Appointment> allAppointments = appointmentDao.getAllAppointments(null);
+        List<Appointment> allAppointments = appointmentDao.getAllAppointments(null, null);
         Appointment appointment = new Appointment();
         appointment.setPatient(allAppointments.get(0).getPatient());
         appointment.setLocation(allAppointments.get(0).getLocation());
         appointment.setService(allAppointments.get(0).getService());
         appointment.setStatus(null);
-        List<Appointment> searchedAppointmentList = appointmentDao.search(appointment);
+        List<Appointment> searchedAppointmentList = appointmentDao.search(appointment, null);
         assertEquals(1, searchedAppointmentList.size());
     }
 
@@ -167,7 +167,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         appointmentSearchRequest.setStartDate(startDate);
         appointmentSearchRequest.setEndDate(endDate);
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(6, appointments.size());
     }
@@ -178,7 +178,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         Date startDate = DateUtil.convertToDate("2000-08-10T18:30:00.0Z", DateUtil.DateFormatType.UTC);
         appointmentSearchRequest.setStartDate(startDate);
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(10, appointments.size());
     }
@@ -192,7 +192,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         appointmentSearchRequest.setEndDate(endDate);
         appointmentSearchRequest.setLimit(2);
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(2, appointments.size());
     }
@@ -206,7 +206,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         appointmentSearchRequest.setEndDate(endDate);
         appointmentSearchRequest.setPatientUuid("75e04d42-3ca8-11e3-bf2b-0800271c1b78");
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(2, appointments.size());
         assertEquals(DateUtil.convertToDate("2108-08-08T13:00:00.0Z", DateUtil.DateFormatType.UTC)
@@ -224,7 +224,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         appointmentSearchRequest.setEndDate(endDate);
         appointmentSearchRequest.setPatientUuid("75e04d42-3ca8-11e3-bf2b-0800271c1b78");
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(1, appointments.size());
     }
@@ -234,7 +234,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
         AppointmentSearchRequest appointmentSearchRequest = new AppointmentSearchRequest();
         appointmentSearchRequest.setProviderUuid("2d15071d-439d-44e8-9825-aa8e1a30d2a2");
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(1, appointments.size());
     }
@@ -243,7 +243,7 @@ public class AppointmentDaoImplIT extends BaseIntegrationTest {
     public void shouldReturnAllAppointmentsInNoGivenDates() throws ParseException {
         AppointmentSearchRequest appointmentSearchRequest = new AppointmentSearchRequest();
 
-        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest);
+        List<Appointment> appointments = appointmentDao.search(appointmentSearchRequest, null);
 
         assertEquals(11, appointments.size());
     }

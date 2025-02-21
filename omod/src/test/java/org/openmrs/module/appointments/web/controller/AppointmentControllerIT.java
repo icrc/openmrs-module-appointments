@@ -5,12 +5,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentAuditDao;
 import org.openmrs.module.appointments.model.Appointment;
 import org.openmrs.module.appointments.model.AppointmentAudit;
 import org.openmrs.module.appointments.model.AppointmentConflictType;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
 import org.openmrs.module.appointments.web.contract.AppointmentDefaultResponse;
 import org.openmrs.module.appointments.web.contract.AppointmentsSummary;
@@ -28,6 +30,7 @@ import java.util.TimeZone;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentControllerIT extends BaseIntegrationTest {
     @Autowired
@@ -39,6 +42,9 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     @Autowired
     AppointmentAuditDao appointmentAuditDao;
 
+    @Mock
+    UserLocationService userLocationService;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -46,6 +52,7 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     public void setUp() throws Exception {
         executeDataSet("appointmentTestData.xml");
         Context.getAdministrationService().setGlobalProperty("disableDefaultAppointmentValidations", "false");
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
     }
 
     @Test

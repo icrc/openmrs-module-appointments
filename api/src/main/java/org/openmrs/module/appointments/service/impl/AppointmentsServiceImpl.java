@@ -22,6 +22,7 @@ import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.notification.NotificationResult;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.validator.AppointmentStatusChangeValidator;
 import org.openmrs.module.appointments.validator.AppointmentValidator;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +69,8 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
     private PatientAppointmentNotifierService appointmentNotifierService;
 
+    private UserLocationService userLocationService;
+
     public void setAppointmentDao(AppointmentDao appointmentDao) {
         this.appointmentDao = appointmentDao;
     }
@@ -102,6 +105,10 @@ public class AppointmentsServiceImpl implements AppointmentsService {
 
     public void setAppointmentNotifierService(PatientAppointmentNotifierService appointmentNotifierService) {
         this.appointmentNotifierService = appointmentNotifierService;
+    }
+
+    public void setUserLocationService(UserLocationService userLocationService) {
+        this.userLocationService = userLocationService;
     }
 
     private boolean validateIfUserHasSelfOrAllAppointmentsAccess(Appointment appointment) {
@@ -185,7 +192,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     @Transactional
     @Override
     public List<Appointment> getAllAppointments(Date forDate) {
-        List<Appointment> appointments = appointmentDao.getAllAppointments(forDate);
+        List<Appointment> appointments = appointmentDao.getAllAppointments(forDate, userLocationService.getUserLocationIds());
         return appointments.stream().filter(appointment -> !isServiceOrServiceTypeVoided(appointment)).collect(Collectors.toList());
     }
 
@@ -203,26 +210,26 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     @Transactional
     @Override
     public List<Appointment> search(Appointment appointment) {
-        List<Appointment> appointments = appointmentDao.search(appointment);
+        List<Appointment> appointments = appointmentDao.search(appointment, userLocationService.getUserLocationIds());
         return appointments.stream().filter(searchedAppointment -> !isServiceOrServiceTypeVoided(searchedAppointment)).collect(Collectors.toList());
     }
 
     @Transactional
     @Override
     public List<Appointment> getAllFutureAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition) {
-        return appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition);
+        return appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition, userLocationService.getUserLocationIds());
     }
 
     @Transactional
     @Override
     public List<Appointment> getAllFutureAppointmentsForServiceType(AppointmentServiceType appointmentServiceType) {
-        return appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType);
+        return appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType, userLocationService.getUserLocationIds());
     }
 
     @Transactional
     @Override
     public List<Appointment> getAppointmentsForService(AppointmentServiceDefinition appointmentServiceDefinition, Date startDate, Date endDate, List<AppointmentStatus> appointmentStatusList) {
-        return appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, appointmentStatusList);
+        return appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, appointmentStatusList, userLocationService.getUserLocationIds());
     }
 
     @Transactional
@@ -265,7 +272,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
     @Transactional
     @Override
     public List<Appointment> getAllAppointmentsInDateRange(Date startDate, Date endDate) {
-        List<Appointment> appointments = appointmentDao.getAllAppointmentsInDateRange(startDate, endDate);
+        List<Appointment> appointments = appointmentDao.getAllAppointmentsInDateRange(startDate, endDate, userLocationService.getUserLocationIds());
         return appointments.stream().filter(appointment -> !isServiceOrServiceTypeVoided(appointment)).collect(Collectors.toList());
     }
 
@@ -291,7 +298,7 @@ public class AppointmentsServiceImpl implements AppointmentsService {
         if (isNull(appointmentSearchRequest.getStartDate())) {
             return null;
         }
-        return appointmentDao.search(appointmentSearchRequest);
+        return appointmentDao.search(appointmentSearchRequest, userLocationService.getUserLocationIds());
     }
 
     @Override
