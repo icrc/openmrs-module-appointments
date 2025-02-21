@@ -5,12 +5,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentMatchers;
-import org.openmrs.module.appointments.dao.UserLocationDao;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
 import org.openmrs.module.appointments.web.contract.AppointmentServiceDefaultResponse;
 import org.openmrs.module.appointments.web.contract.AppointmentServiceFullResponse;
@@ -36,7 +35,7 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     AppointmentsService appointmentsService;
 
     @Autowired
-    UserLocationDao userLocationDao;
+    UserLocationService userLocationService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -44,7 +43,7 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     @Before
     public void setUp() throws Exception {
         executeDataSet("appointmentServicesTestData.xml");
-        when(userLocationDao.getUserLocationIds(ArgumentMatchers.anyInt())).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
     }
 
     @Test

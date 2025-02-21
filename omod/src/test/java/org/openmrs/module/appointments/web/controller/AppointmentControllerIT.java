@@ -5,14 +5,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentMatchers;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentAuditDao;
-import org.openmrs.module.appointments.dao.UserLocationDao;
 import org.openmrs.module.appointments.model.Appointment;
 import org.openmrs.module.appointments.model.AppointmentAudit;
 import org.openmrs.module.appointments.model.AppointmentConflictType;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
 import org.openmrs.module.appointments.web.contract.AppointmentDefaultResponse;
 import org.openmrs.module.appointments.web.contract.AppointmentsSummary;
@@ -43,7 +42,7 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     AppointmentAuditDao appointmentAuditDao;
 
     @Autowired
-    UserLocationDao userLocationDao;
+    UserLocationService userLocationService;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -52,7 +51,7 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     public void setUp() throws Exception {
         executeDataSet("appointmentTestData.xml");
         Context.getAdministrationService().setGlobalProperty("disableDefaultAppointmentValidations", "false");
-        when(userLocationDao.getUserLocationIds(ArgumentMatchers.anyInt())).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
     }
 
     @Test
