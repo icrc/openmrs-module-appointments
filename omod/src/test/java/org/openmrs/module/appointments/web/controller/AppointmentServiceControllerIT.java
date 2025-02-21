@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentMatchers;
 import org.openmrs.module.appointments.dao.UserLocationDao;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentStatus;
@@ -22,6 +23,7 @@ import java.util.*;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     @Autowired
@@ -42,6 +44,7 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     @Before
     public void setUp() throws Exception {
         executeDataSet("appointmentServicesTestData.xml");
+        when(userLocationDao.getUserLocationIds(ArgumentMatchers.anyInt())).thenReturn(null);
     }
 
     @Test

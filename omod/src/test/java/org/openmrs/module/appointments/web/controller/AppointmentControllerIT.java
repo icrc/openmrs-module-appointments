@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentMatchers;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentAuditDao;
 import org.openmrs.module.appointments.dao.UserLocationDao;
@@ -29,6 +30,7 @@ import java.util.TimeZone;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentControllerIT extends BaseIntegrationTest {
     @Autowired
@@ -50,6 +52,7 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
     public void setUp() throws Exception {
         executeDataSet("appointmentTestData.xml");
         Context.getAdministrationService().setGlobalProperty("disableDefaultAppointmentValidations", "false");
+        when(userLocationDao.getUserLocationIds(ArgumentMatchers.anyInt())).thenReturn(null);
     }
 
     @Test
