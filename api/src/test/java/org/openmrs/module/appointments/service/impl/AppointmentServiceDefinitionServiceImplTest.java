@@ -59,6 +59,7 @@ public class AppointmentServiceDefinitionServiceImplTest {
         mockStatic(Context.class);
         authenticatedUser = new User(8);
         PowerMockito.when(Context.getAuthenticatedUser()).thenReturn(authenticatedUser);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
         appointmentServiceService.setUserLocationService(userLocationService);
     }
 

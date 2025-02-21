@@ -148,10 +148,12 @@ public class AppointmentsServiceImplTest {
     public void init() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.initMocks(this);
         mockStatic(Context.class);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
         appointmentValidators.add(appointmentValidator);
         statusChangeValidators.add(statusChangeValidator);
         appointmentConflicts.add(appointmentServiceUnavailabilityConflict);
         appointmentConflicts.add(patientDoubleBookingConflict);
+        appointmentsService.setUserLocationService(userLocationService);
         setValuesForMemberFields(appointmentsService, "appointmentValidators", appointmentValidators);
         setValuesForMemberFields(appointmentsService, "statusChangeValidators", statusChangeValidators);
         setValuesForMemberFields(appointmentsService, "appointmentConflicts", appointmentConflicts);
@@ -178,7 +180,6 @@ public class AppointmentsServiceImplTest {
         appointment.setAppointmentKind(AppointmentKind.Scheduled);
         appointment.setAppointmentAudits(new HashSet<>());
         when(appointmentDao.getAppointmentByUuid(any())).thenReturn(null);
-        appointmentsService.setUserLocationService(userLocationService);
         appointmentsService.validateAndSave(appointment);
         verify(appointmentDao, times(1)).save(appointment);
     }
