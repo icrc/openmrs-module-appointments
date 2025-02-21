@@ -16,6 +16,7 @@ import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.util.DateUtil;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.createAlias("patient", "patient");
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -64,7 +65,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Appointment.class).add(
                 Example.create(appointment).excludeProperty("uuid"));
 
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -98,7 +99,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
         criteria.add(Restrictions.ne("status", AppointmentStatus.Cancelled));
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -119,7 +120,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
         criteria.add(Restrictions.ne("status", AppointmentStatus.Cancelled));
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -142,7 +143,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.add(Restrictions.ge("startDateTime", startDate));
         criteria.add(Restrictions.le("startDateTime", endDate));
         criteria.createCriteria("service").add(Example.create(appointmentServiceDefinition));
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -171,7 +172,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         criteria.createAlias("patient", "patient");
         criteria.add(Restrictions.eq("patient.voided", false));
         criteria.add(Restrictions.eq("patient.personVoided", false));
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
@@ -198,7 +199,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         setPatientCriteria(appointmentSearchRequest, criteria);
         setLimitCriteria(appointmentSearchRequest, criteria);
         setProviderCriteria(appointmentSearchRequest, criteria);
-        if (!locationIds.isEmpty()) {
+        if (!CollectionUtils.isEmpty(locationIds)) {
             criteria.add(
                     Restrictions.or(
                             Restrictions.in("location.id", locationIds),
