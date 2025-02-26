@@ -96,6 +96,9 @@
                 <property name="appointmentAuditDao">
                     <ref bean="appointmentAuditDao"/>
                 </property>
+                <property name="userLocationService">
+                    <ref bean="userLocationServiceImpl"/>
+                </property>
                 <property name="statusChangeValidators">
                     <list>
                         <bean class="org.openmrs.module.appointments.validator.impl.DefaultAppointmentStatusChangeValidator"/>
@@ -241,6 +244,9 @@
                 <property name="appointmentServiceDao">
                     <ref bean="appointmentServiceDao"/>
                 </property>
+                <property name="userLocationService">
+                    <ref bean="userLocationServiceImpl"/>
+                </property>
                 <property name="appointmentsService">
                     <ref bean="appointmentsService"/>
                 </property>
@@ -261,6 +267,18 @@
     </bean>
 
     <bean id="appointmentAuditDao" class="org.openmrs.module.appointments.dao.impl.AppointmentAuditDaoImpl">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="userLocationServiceImpl" class="org.openmrs.module.appointments.service.impl.UserLocationServiceImpl">
+        <property name="userLocationDao">
+            <ref bean="userLocationDao"/>
+        </property>
+    </bean>
+
+    <bean id="userLocationDao" class="org.openmrs.module.appointments.dao.impl.UserLocationDaoImpl">
         <property name="sessionFactory">
             <ref bean="sessionFactory"/>
         </property>

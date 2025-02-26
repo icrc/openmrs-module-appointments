@@ -33,6 +33,7 @@ import org.openmrs.module.appointments.model.AppointmentSearchRequest;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.openmrs.module.appointments.model.AppointmentStatus;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.util.DateUtil;
 import org.openmrs.module.appointments.validator.AppointmentStatusChangeValidator;
 import org.openmrs.module.appointments.validator.AppointmentValidator;
@@ -135,6 +136,9 @@ public class AppointmentsServiceImplTest {
     @Mock
     private PatientAppointmentNotifierService patientAppointmentNotifierService;
 
+    @Mock
+    private UserLocationService userLocationService;
+
     @InjectMocks
     private AppointmentsServiceImpl appointmentsService;
 
@@ -144,10 +148,12 @@ public class AppointmentsServiceImplTest {
     public void init() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.initMocks(this);
         mockStatic(Context.class);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
         appointmentValidators.add(appointmentValidator);
         statusChangeValidators.add(statusChangeValidator);
         appointmentConflicts.add(appointmentServiceUnavailabilityConflict);
         appointmentConflicts.add(patientDoubleBookingConflict);
+        appointmentsService.setUserLocationService(userLocationService);
         setValuesForMemberFields(appointmentsService, "appointmentValidators", appointmentValidators);
         setValuesForMemberFields(appointmentsService, "statusChangeValidators", statusChangeValidators);
         setValuesForMemberFields(appointmentsService, "appointmentConflicts", appointmentConflicts);
@@ -224,7 +230,7 @@ public class AppointmentsServiceImplTest {
     @Test
     public void testGetAllAppointments() {
         appointmentsService.getAllAppointments(null);
-        verify(appointmentDao, times(1)).getAllAppointments(null);
+        verify(appointmentDao, times(1)).getAllAppointments(null, null);
     }
 
     @Test
@@ -238,9 +244,9 @@ public class AppointmentsServiceImplTest {
         appointment2.setService(new AppointmentServiceDefinition());
         appointments.add(appointment1);
         appointments.add(appointment2);
-        when(appointmentDao.getAllAppointments(null)).thenReturn(appointments);
+        when(appointmentDao.getAllAppointments(null, null)).thenReturn(appointments);
         List<Appointment> appointmentList = appointmentsService.getAllAppointments(null);
-        verify(appointmentDao, times(1)).getAllAppointments(null);
+        verify(appointmentDao, times(1)).getAllAppointments(null, null);
         assertEquals(appointmentList.size(), 1);
     }
 
@@ -258,9 +264,9 @@ public class AppointmentsServiceImplTest {
         Appointment appointment2 = new Appointment();
         appointment2.setService(new AppointmentServiceDefinition());
         appointments.add(appointment2);
-        when(appointmentDao.getAllAppointments(null)).thenReturn(appointments);
+        when(appointmentDao.getAllAppointments(null, null)).thenReturn(appointments);
         List<Appointment> appointmentList = appointmentsService.getAllAppointments(null);
-        verify(appointmentDao, times(1)).getAllAppointments(null);
+        verify(appointmentDao, times(1)).getAllAppointments(null, null);
         assertEquals(appointmentList.size(), 1);
     }
 
@@ -268,22 +274,22 @@ public class AppointmentsServiceImplTest {
     public void shouldGetAllFutureAppointmentsForTheGivenAppointmentService() throws Exception {
         AppointmentServiceDefinition appointmentServiceDefinition = new AppointmentServiceDefinition();
         appointmentServiceDefinition.setUuid("uuid");
-        when(appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition)).thenReturn(new ArrayList<>());
+        when(appointmentDao.getAllFutureAppointmentsForService(appointmentServiceDefinition, null)).thenReturn(new ArrayList<>());
 
         appointmentsService.getAllFutureAppointmentsForService(appointmentServiceDefinition);
 
-        verify(appointmentDao, times(1)).getAllFutureAppointmentsForService(appointmentServiceDefinition);
+        verify(appointmentDao, times(1)).getAllFutureAppointmentsForService(appointmentServiceDefinition, null);
     }
 
     @Test
     public void shouldGetAllFutureAppointmentsForTheGivenAppointmentServiceType() {
         AppointmentServiceType appointmentServiceType = new AppointmentServiceType();
         appointmentServiceType.setUuid("typeUuid");
-        when(appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType)).thenReturn(new ArrayList<>());
+        when(appointmentDao.getAllFutureAppointmentsForServiceType(appointmentServiceType, null)).thenReturn(new ArrayList<>());
 
         appointmentsService.getAllFutureAppointmentsForServiceType(appointmentServiceType);
 
-        verify(appointmentDao, times(1)).getAllFutureAppointmentsForServiceType(appointmentServiceType);
+        verify(appointmentDao, times(1)).getAllFutureAppointmentsForServiceType(appointmentServiceType, null);
     }
 
     @Test
@@ -299,10 +305,10 @@ public class AppointmentsServiceImplTest {
         appointment.setId(2);
         appointment.setUuid("someUuid");
 
-        when(appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null)).thenReturn(appointments);
+        when(appointmentDao.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null, null)).thenReturn(appointments);
 
         appointmentsService.getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null);
-        verify(appointmentDao, times(1)).getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null);
+        verify(appointmentDao, times(1)).getAppointmentsForService(appointmentServiceDefinition, startDate, endDate, null, null);
     }
 
     @Test
@@ -311,9 +317,9 @@ public class AppointmentsServiceImplTest {
         appointment.setUuid("Uuid");
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(appointment);
-        when(appointmentDao.search(appointment)).thenReturn(appointmentList);
+        when(appointmentDao.search(appointment, null)).thenReturn(appointmentList);
         appointmentsService.search(appointment);
-        verify(appointmentDao, times(1)).search(appointment);
+        verify(appointmentDao, times(1)).search(appointment, null);
     }
 
     @Test
@@ -387,7 +393,7 @@ public class AppointmentsServiceImplTest {
     @Test
     public void shouldCallAppointmentDaoOnce() {
         appointmentsService.getAllAppointmentsInDateRange(null, null);
-        verify(appointmentDao, times(1)).getAllAppointmentsInDateRange(null, null);
+        verify(appointmentDao, times(1)).getAllAppointmentsInDateRange(null, null, null);
     }
 
     @Test
@@ -404,9 +410,9 @@ public class AppointmentsServiceImplTest {
         appointment1.setStartDateTime(new Date());
         appointments.add(appointment1);
         appointments.add(appointment2);
-        when(appointmentDao.getAllAppointmentsInDateRange(null, null)).thenReturn(appointments);
+        when(appointmentDao.getAllAppointmentsInDateRange(null, null, null)).thenReturn(appointments);
         List<Appointment> appointmentList = appointmentsService.getAllAppointmentsInDateRange(null, null);
-        verify(appointmentDao, times(1)).getAllAppointmentsInDateRange(null, null);
+        verify(appointmentDao, times(1)).getAllAppointmentsInDateRange(null, null, null);
         assertEquals(appointmentList.size(), 1);
     }
 
@@ -513,11 +519,11 @@ public class AppointmentsServiceImplTest {
         appointmentSearchRequest.setStartDate(startDate);
         appointmentSearchRequest.setEndDate(endDate);
         ArrayList<Appointment> expectedAppointments = new ArrayList<>();
-        when(appointmentDao.search(appointmentSearchRequest)).thenReturn(expectedAppointments);
+        when(appointmentDao.search(appointmentSearchRequest, null)).thenReturn(expectedAppointments);
 
         List<Appointment> actualAppointments = appointmentsService.search(appointmentSearchRequest);
 
-        verify(appointmentDao, times(1)).search(appointmentSearchRequest);
+        verify(appointmentDao, times(1)).search(appointmentSearchRequest, null);
         assertEquals(expectedAppointments, actualAppointments);
     }
 
@@ -530,7 +536,7 @@ public class AppointmentsServiceImplTest {
 
         List<Appointment> actualAppointments = appointmentsService.search(appointmentSearchRequest);
 
-        verify(appointmentDao, never()).search(appointmentSearchRequest);
+        verify(appointmentDao, never()).search(appointmentSearchRequest, null);
         assertNull(actualAppointments);
     }
 
@@ -542,10 +548,10 @@ public class AppointmentsServiceImplTest {
         appointmentSearchRequest.setEndDate(null);
 
         ArrayList<Appointment> expectedAppointments = new ArrayList<>();
-        when(appointmentDao.search(appointmentSearchRequest)).thenReturn(expectedAppointments);
+        when(appointmentDao.search(appointmentSearchRequest, null)).thenReturn(expectedAppointments);
         List<Appointment> actualAppointments = appointmentsService.search(appointmentSearchRequest);
 
-        verify(appointmentDao, times(1)).search(appointmentSearchRequest);
+        verify(appointmentDao, times(1)).search(appointmentSearchRequest, null);
         assertEquals(expectedAppointments, actualAppointments);
     }
 

@@ -37,5 +37,7 @@ public interface AppointmentServiceDefinitionService {
     @Transactional
     @Authorized({VIEW_APPOINTMENTS_SERVICE, MANAGE_APPOINTMENTS_SERVICE})
     Integer calculateCurrentLoad(AppointmentServiceDefinition appointmentServiceDefinition, Date startDateTime, Date endDateTime);
+
+    void setUserLocationService(UserLocationService userLocationService);
 }
 

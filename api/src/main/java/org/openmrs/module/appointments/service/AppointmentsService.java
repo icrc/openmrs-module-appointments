@@ -94,5 +94,7 @@ public interface AppointmentsService {
     @Transactional
     @Authorized({MANAGE_APPOINTMENTS, MANAGE_OWN_APPOINTMENTS})
     Appointment validateAndSave(Supplier<Appointment> mapper);
+
+    void setUserLocationService(UserLocationService userLocationService);
 }
 

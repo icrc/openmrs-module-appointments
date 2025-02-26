@@ -81,6 +81,9 @@
 						</property>
 					</bean>
 				</property>
+				<property name="userLocationService">
+					<ref bean="userLocationServiceImpl"/>
+				</property>
 				<property name="appointmentAuditDao">
 					<bean class="org.openmrs.module.appointments.dao.impl.AppointmentAuditDaoImpl">
 						<property name="sessionFactory">
@@ -163,6 +166,9 @@
 						</property>
 					</bean>
 				</property>
+				<property name="userLocationService">
+					<ref bean="userLocationServiceImpl"/>
+				</property>
 				<property name="appointmentsService">
 					<ref bean="appointmentsService"/>
 				</property>
@@ -179,6 +185,18 @@
 	<bean id="patientAppointmentNotifierService" class="org.openmrs.module.appointments.service.impl.PatientAppointmentNotifierService"/>
 
 	<bean id="appointmentDao" class="org.openmrs.module.appointments.dao.impl.AppointmentDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory"/>
+		</property>
+	</bean>
+
+	<bean id="userLocationServiceImpl" class="org.openmrs.module.appointments.service.impl.UserLocationServiceImpl">
+		<property name="userLocationDao">
+			<ref bean="userLocationDao"/>
+		</property>
+	</bean>
+
+	<bean id="userLocationDao" class="org.openmrs.module.appointments.dao.impl.UserLocationDaoImpl">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory"/>
 		</property>

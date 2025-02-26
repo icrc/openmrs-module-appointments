@@ -8,6 +8,7 @@ import org.openmrs.module.appointments.dao.AppointmentServiceDao;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentServiceType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -20,8 +21,16 @@ public class AppointmentServiceDaoImpl implements AppointmentServiceDao{
     }
 
     @Override
-    public List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided) {
+    public List<AppointmentServiceDefinition> getAllAppointmentServices(boolean includeVoided, List<String> locationIds) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(AppointmentServiceDefinition.class, "appointmentService");
+        if (!CollectionUtils.isEmpty(locationIds)) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.in("location.id", locationIds),
+                            Restrictions.isNull("location")
+                    )
+            );
+        }
         if(!includeVoided) {
             criteria.add(Restrictions.eq("voided", includeVoided));
         }

@@ -5,10 +5,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.openmrs.module.appointments.model.AppointmentServiceDefinition;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
 import org.openmrs.module.appointments.web.contract.AppointmentServiceDefaultResponse;
 import org.openmrs.module.appointments.web.contract.AppointmentServiceFullResponse;
@@ -21,10 +23,9 @@ import java.util.*;
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentServiceControllerIT extends BaseIntegrationTest {
-    @Autowired
-    AppointmentServiceController appointmentServiceController;
 
     @Autowired
     AppointmentServiceDefinitionService appointmentServiceDefinitionService;
@@ -32,12 +33,20 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     @Autowired
     AppointmentsService appointmentsService;
 
+    @Mock
+    UserLocationService userLocationService;
+
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
         executeDataSet("appointmentServicesTestData.xml");
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        appointmentsService.setUserLocationService(userLocationService);
+        appointmentServiceDefinitionService.setUserLocationService(userLocationService);
     }
 
     @Test

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.bahmni.module</groupId>
 		<artifactId>appointments</artifactId>
-		<version>1.6.2.ICRC-SNAPSHOT</version>
+		<version>1.6.3.ICRC-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>appointments-api</artifactId>
@@ -45,6 +45,19 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>datafilter-api</artifactId>
+			<version>${datafilterVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>datafilter-omod</artifactId>
+			<version>${datafilterVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Begin OpenMRS core -->
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
