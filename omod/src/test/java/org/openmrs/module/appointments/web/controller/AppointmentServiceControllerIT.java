@@ -26,8 +26,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentServiceControllerIT extends BaseIntegrationTest {
-    @Autowired
-    AppointmentServiceController appointmentServiceController;
 
     @Autowired
     AppointmentServiceDefinitionService appointmentServiceDefinitionService;
@@ -45,6 +43,10 @@ public class AppointmentServiceControllerIT extends BaseIntegrationTest {
     public void setUp() throws Exception {
         executeDataSet("appointmentServicesTestData.xml");
         when(userLocationService.getUserLocationIds()).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        appointmentsService.setUserLocationService(userLocationService);
+        appointmentServiceDefinitionService.setUserLocationService(userLocationService);
     }
 
     @Test

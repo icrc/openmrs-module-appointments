@@ -3,11 +3,10 @@ package org.openmrs.module.appointments.web.controller;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.appointments.dao.AppointmentAuditDao;
 import org.openmrs.module.appointments.model.Appointment;
@@ -16,22 +15,20 @@ import org.openmrs.module.appointments.model.AppointmentConflictType;
 import org.openmrs.module.appointments.model.AppointmentProviderResponse;
 import org.openmrs.module.appointments.model.AppointmentStatus;
 import org.openmrs.module.appointments.service.AppointmentsService;
+import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.util.DateUtil;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
 import org.openmrs.module.appointments.web.contract.AppointmentDefaultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentsControllerIT extends BaseIntegrationTest {
 
@@ -44,10 +41,15 @@ public class AppointmentsControllerIT extends BaseIntegrationTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Mock
+    UserLocationService userLocationService;
+
     @Before
     public void setUp() throws Exception {
         executeDataSet("appointmentTestData.xml");
         Context.getAdministrationService().setGlobalProperty("disableDefaultAppointmentValidations", "false");
+        when(userLocationService.getUserLocationIds()).thenReturn(null);
+        appointmentsService.setUserLocationService(userLocationService);
     }
 
     @Test

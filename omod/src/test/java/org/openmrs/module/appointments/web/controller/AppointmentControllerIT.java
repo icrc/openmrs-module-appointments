@@ -11,6 +11,7 @@ import org.openmrs.module.appointments.dao.AppointmentAuditDao;
 import org.openmrs.module.appointments.model.Appointment;
 import org.openmrs.module.appointments.model.AppointmentAudit;
 import org.openmrs.module.appointments.model.AppointmentConflictType;
+import org.openmrs.module.appointments.service.AppointmentServiceDefinitionService;
 import org.openmrs.module.appointments.service.AppointmentsService;
 import org.openmrs.module.appointments.service.UserLocationService;
 import org.openmrs.module.appointments.web.BaseIntegrationTest;
@@ -33,14 +34,15 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 public class AppointmentControllerIT extends BaseIntegrationTest {
-    @Autowired
-    AppointmentController appointmentController;
 
     @Autowired
     AppointmentsService appointmentsService;
 
     @Autowired
     AppointmentAuditDao appointmentAuditDao;
+
+    @Autowired
+    AppointmentServiceDefinitionService appointmentServiceDefinitionService;
 
     @Mock
     UserLocationService userLocationService;
@@ -53,6 +55,8 @@ public class AppointmentControllerIT extends BaseIntegrationTest {
         executeDataSet("appointmentTestData.xml");
         Context.getAdministrationService().setGlobalProperty("disableDefaultAppointmentValidations", "false");
         when(userLocationService.getUserLocationIds()).thenReturn(null);
+        appointmentsService.setUserLocationService(userLocationService);
+        appointmentServiceDefinitionService.setUserLocationService(userLocationService);
     }
 
     @Test
